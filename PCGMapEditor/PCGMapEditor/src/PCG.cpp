@@ -1,0 +1,253 @@
+#define _CRT_SECURE_NO_WARNINGS
+
+#include "PCG.h"
+#include "perlin.h"
+#include "save_dialog.h"
+#include <stdio.h>
+#include <iostream>
+#include <fstream>
+
+#define RAYGUI_IMPLEMENTATION
+#include "raygui.h"
+
+static float s_offsetX = 0.0f;
+static float s_offsetY = 0.0f;
+
+
+// =============================================
+// RandomMapGenerator
+// =============================================
+// Constructor
+PCG::RandomMapGenerator::RandomMapGenerator() {
+    // nothing to initialize for now, but you could seed a random generator here if you want reproducible maps
+}
+
+// Destructor
+PCG::RandomMapGenerator::~RandomMapGenerator() {
+    // nothing to clean up for now, but if you had allocated resources (like noise generators) you would release them here
+}
+
+void PCG::RandomMapGenerator::Generate(TileType _tileArray[MAP_ROWS][MAP_COLUMNS]) {
+    for (int y = 0; y < MAP_ROWS; y++) {
+        for (int x = 0; x < MAP_COLUMNS; x++) {
+            _tileArray[y][x] = (TileType)GetRandomValue(0, TILE_COUNT - 1);
+        }
+    }
+}
+
+// =============================================
+// NoiseGenerator
+// =============================================
+// Constructor
+PCG::NoiseMapGenerator::NoiseMapGenerator() {
+    s_offsetX = (float)GetRandomValue(0, 10000);
+    s_offsetY = (float)GetRandomValue(0, 10000);
+}
+
+// Destructor
+PCG::NoiseMapGenerator::~NoiseMapGenerator() {
+    // nothing to clean up for now, but if you had allocated resources (like noise generators) you would release them here
+}
+
+void PCG::NoiseMapGenerator::Generate(TileType _tileArray[MAP_ROWS][MAP_COLUMNS]) {
+    for (int y = 0; y < MAP_ROWS; y++) {
+        for (int x = 0; x < MAP_COLUMNS; x++) {
+            float noise = perlinNoise(s_offsetX + (float)x / MAP_COLUMNS * NOISE_SCALE, s_offsetY + (float)y / MAP_ROWS * NOISE_SCALE);
+            _tileArray[y][x] = (noise > 0.0f) ? TILE_TYPE_GRASS : TILE_TYPE_ROCK;
+            printf("%f ", noise);
+        }
+    }
+}
+
+// ============================================
+// TileMap constructor
+// ============================================
+
+PCG::TileMap::TileMap()
+{
+    for (int y = 0; y < MAP_ROWS; y++) {
+        for (int x = 0; x < MAP_COLUMNS; x++) {
+            tileArray[y][x] = TILE_TYPE_GRASS;
+        }
+    }
+    mapGenerator = nullptr;
+}
+
+// =============================================
+// TileMap destructor
+// =============================================
+
+PCG::TileMap::~TileMap()
+{
+    if (mapGenerator != nullptr) {
+        delete mapGenerator;
+        mapGenerator = nullptr;
+    }
+}
+
+// ============================================= 
+// CreateMap
+// ============================================= 
+void PCG::TileMap::CreateMap() {
+    for (int y = 0; y < MAP_ROWS; y++) {
+        for (int x = 0; x < MAP_COLUMNS; x++) {
+            //_tileArray[y][x] = (TileType)GetRandomValue(0, TILE_COUNT - 1);
+			float noise = perlinNoise(s_offsetX + (float)x / MAP_COLUMNS * NOISE_SCALE, s_offsetY + (float)y / MAP_ROWS * NOISE_SCALE);
+			tileArray[y][x] = (noise > 0.0f) ? TILE_TYPE_GRASS : TILE_TYPE_ROCK;
+			printf("%f ", noise);
+        }
+		printf("\n");
+    }
+}
+
+// ============================================= 
+// SetTile(int x, int y, TileType tileType)
+// ============================================= 
+
+void PCG::TileMap::SetTile(int x, int y, TileType tileType)
+{
+    if (x >= 0 && x < MAP_COLUMNS && y >= 0 && y < MAP_ROWS) {
+        tileArray[y][x] = tileType;
+    }
+}
+
+// ============================================= 
+// GetTileColor
+// ============================================= 
+Color PCG::TileMap::GetTileColor(PCG::TileType _tileType) const {
+    switch (tileType) {
+    case TILE_TYPE_GRASS: return GRASS_COLOR;
+    case TILE_TYPE_ROCK: return ROCK_COLOR;
+    default: return UNKNOWN_COLOR;
+    }
+}
+
+// ============================================= 
+// DrawMap
+// ============================================= 
+void PCG::TileMap::DrawMap(bool isEngine) const {
+    for (int y = 0; y < MAP_ROWS; y++) {
+        for (int x = 0; x < MAP_COLUMNS; x++) {
+            if (isEngine) {
+                Vector3 position = { x, 0.0f, y };
+                DrawCube(position, 1.0f, 1.0f, 1.0f, PCG::GetTileColor(_tileArray[y][x]));
+            }
+            else {
+                DrawRectangle(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE, PCG::GetTileColor(_tileArray[y][x]));
+            }
+        }
+    }
+}
+
+// ============================================= 
+// PrintMap
+// ============================================= 
+void PCG::TileMap::PrintMap() const {
+    printf("\n-------Map Layout:--------\n");
+    for (int y = 0; y < MAP_ROWS; y++) {
+        for (int x = 0; x < MAP_COLUMNS; x++) {
+            if (_tileArray[y][x] == PCG::TILE_TYPE_GRASS) {
+                printf("%c", GRASS_CHAR);
+            }
+            else {
+                printf("%c", ROCK_CHAR);
+            }
+        }
+        printf("\n");
+    }
+    printf("--------------------------\n");
+}
+
+// =============================================
+// GetTileChar
+// =============================================
+char PCG::TileMap::GetTileChar(TileType _tileType) const {
+    switch (tileType) {
+    case TILE_TYPE_GRASS: return GRASS_CHAR;
+    case TILE_TYPE_ROCK: return ROCK_CHAR;
+    default: return '?';
+    }
+}
+
+// =============================================
+// SaveMapData
+// =============================================
+void PCG::TileMap::SaveMapData(const char* fileName) const {
+	char filePath[260] = "";
+
+    if (!ShowSaveDialog(filePath, sizeof(filePath), fileName)) {
+        printf("Save cancelled.\n");
+        return;
+    }
+
+    FILE* file = fopen(filePath, "w");
+    if (file == NULL) {
+        printf("Error opening file for writing: %s\n", filePath);
+        return;
+	}
+
+    // Save offsets on the first line
+    fprintf(file, "%f %f\n", s_offsetX, s_offsetY);
+
+    for (int y = 0; y < MAP_ROWS; y++) {
+        for (int x = 0; x < MAP_COLUMNS; x++) {
+			fputc(GetTileChar(tileArray[y][x]), file);
+        }
+        fputc('\n', file);
+    }
+	fclose(file);
+	printf("Map saved successfully to: %s\n", filePath);
+}
+
+// =============================================
+// LoadMapData
+// =============================================
+void PCG::TileMap::LoadMapData(const char* fileName) const {
+    FILE* file = fopen(fileName, "r");
+    if (file == NULL) {
+        printf("Error opening file for reading: %s\n", fileName);
+        return;
+    }
+
+    // Read offsets from the first line
+    fscanf(file, "%f %f\n", &s_offsetX, &s_offsetY);
+
+    for (int y = 0; y < MAP_ROWS; y++) {
+        for (int x = 0; x < MAP_COLUMNS; x++) {
+            int ch = fgetc(file);
+            while (ch == '\n' || ch == '\r') {
+                ch = fgetc(file);
+			}
+
+            if (ch == GRASS_CHAR) {
+                tileArray[y][x] = TILE_TYPE_GRASS;
+            }
+            else if (ch == ROCK_CHAR) {
+                tileArray[y][x] = TILE_TYPE_ROCK;
+            }
+        }
+    }
+    fclose(file);
+}
+
+// =============================================
+// DrawGUI
+// =============================================
+void PCG::DrawGUI() {
+	//Reset Button
+    if (GuiButton(RESET_BUTTON_BOUNDS, "Reset Map")) {
+        CreateMap();
+    }
+
+	// Save Button
+    Rectangle saveRect = { PCG::BUTTON_X, PCG::BUTTON_Y - 140, PCG::BUTTON_WIDTH, PCG::BUTTON_HEIGHT };
+    if (GuiButton(saveRect, "Save Map")) {
+        SaveMapData(MAP_FILE_NAME);
+	}
+
+    //Load Button
+    Rectangle loadRect = { PCG::BUTTON_X, PCG::BUTTON_Y - 70, PCG::BUTTON_WIDTH, PCG::BUTTON_HEIGHT };
+    if (GuiButton(loadRect, "Load Map")) {
+        LoadMapData(MAP_FILE_NAME);
+	}
+}

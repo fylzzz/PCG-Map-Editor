@@ -155,17 +155,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\main.c" />
-    <ClCompile Include="src\PCG.c" />
-    <ClCompile Include="src\perlin.c" />
-    <ClCompile Include="src\save_dialog.c" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\PCG.cpp" />
+    <ClCompile Include="src\perlin.cpp" />
+    <ClCompile Include="src\save_dialog.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\perlin.h" />
     <ClInclude Include="include\save_dialog.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

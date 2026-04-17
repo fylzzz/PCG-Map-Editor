@@ -1,68 +1,92 @@
-#ifndef PCG_H
-#define PCG_H
-
+#pragma once
 #include <raylib.h>
 
-// Defines
-#define SCREEN_WIDTH 1024
-#define SCREEN_HEIGHT 1024
-#define TILE_SIZE 64
-#define NOISE_SCALE 3.0f
+namespace PCG {
 
-// Map Dimensions
-#define MAP_COLUMNS (SCREEN_WIDTH / TILE_SIZE)
-#define MAP_ROWS (SCREEN_HEIGHT / TILE_SIZE)
+	// Defines
+	constexpr int SCREEN_WIDTH = 1024;
+	constexpr int SCREEN_HEIGHT = 1024;
+	constexpr int TILE_SIZE = 64;
+	constexpr int NOISE_SCALE = 3.0f;
 
-// Tile Types
-typedef enum {
-	TILE_TYPE_GRASS,
-	TILE_TYPE_ROCK,
-	TILE_COUNT
-} TileType;
+	// Map Dimensions
+	constexpr int MAP_COLUMNS = (SCREEN_WIDTH / TILE_SIZE);
+	constexpr int MAP_ROWS = (SCREEN_HEIGHT / TILE_SIZE);
 
-// Visuals & Characters
-#define GRASS_CHAR '.'
-#define ROCK_CHAR '#'
-#define GRASS_COLOR (Color){69, 182, 156, 255}
-#define ROCK_COLOR (Color){114, 147, 160, 255}
-#define UNKNOWN_COLOR WHITE
+	// Tile Types
+	typedef enum {
+		TILE_TYPE_GRASS,
+		TILE_TYPE_ROCK,
+		TILE_COUNT
+	} TileType;
 
-// File Names
-#define MAP_FILE_NAME "pcg_map_data.fyl"
+	// Visuals & Characters
+	constexpr char GRASS_CHAR = '.';
+	constexpr char ROCK_CHAR = '#';
+	constexpr Color GRASS_COLOR = { 69, 182, 156, 255 };
+	constexpr Color ROCK_COLOR{ 114, 147, 160, 255 };
+	constexpr Color UNKNOWN_COLOR = WHITE;
 
-// Helpers
-char GetTileChar(TileType tileType);
+	// File Names
+	constexpr char* MAP_FILE_NAME = "pcg_map_data.fyl";
 
-// UI Constants
-#define BUTTON_WIDTH 200
-#define BUTTON_HEIGHT 50
-#define BUTTON_X (SCREEN_WIDTH - BUTTON_WIDTH - 20)
-#define BUTTON_Y (SCREEN_HEIGHT - BUTTON_HEIGHT - 20)
-#define RESET_BUTTON_BOUNDS (Rectangle){BUTTON_X, BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT}
+	// Helpers
+	char GetTileChar(TileType tileType);
 
-// =============================================
-// Function Declarations
-// =============================================
+	// UI Constants
+	constexpr int BUTTON_WIDTH = 200;
+	constexpr int BUTTON_HEIGHT = 50;
+	constexpr int BUTTON_X = (SCREEN_WIDTH - BUTTON_WIDTH - 20);
+	constexpr int BUTTON_Y = (SCREEN_HEIGHT - BUTTON_HEIGHT - 20);
+	constexpr Rectangle RESET_BUTTON_BOUNDS = { BUTTON_X, BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT };
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 
-// PCG Functions
-void PCG_CreateMap(TileType _tileArray[MAP_ROWS][MAP_COLUMNS]);
-void PCG_DrawMap(TileType _tileArray[MAP_ROWS][MAP_COLUMNS], bool isEngine);
-void PCG_PrintMap(TileType _tileArray[MAP_ROWS][MAP_COLUMNS]);
-Color PCG_GetTileColor(TileType tileType);
+	class MapGenerator {
+	public:
+		virtual ~MapGenerator() = default;
+		virtual void Generate(TileType _tileArray[MAP_ROWS][MAP_COLUMNS]) = 0;
+	};
 
-// File I/O Functions
-void PCG_SaveMapData(TileType _tileArray[MAP_ROWS][MAP_COLUMNS], const char* fileName);
-void PCG_LoadMapData(TileType _tileArray[MAP_ROWS][MAP_COLUMNS], const char* fileName);
+	class RandomMapGenerator {
+	public:
+		RandomMapGenerator();
+		~RandomMapGenerator();
+		void Generate(TileType _tileArray[MAP_ROWS][MAP_COLUMNS]) override;
+	};
 
-// UI Functions
-void PCG_DrawGUI(TileType _tileArray[MAP_ROWS][MAP_COLUMNS]);
+	class NoiseMapGenerator {
+	public:
+		NoiseMapGenerator();
+		~NoiseMapGenerator();
+		void Generate(TileType _tileType[MAP_ROWS][MAP_COLUMNS]) override;
+	};
 
-#ifdef __cplusplus
+	class TileMap {
+	public:
+		TileMap();
+		~TileMap();
+
+		// =============================================
+		// Function Declarations
+		// =============================================
+
+		// PCG Functions
+		void CreateMap();
+		void DrawMap() const;
+		void PrintMap() const;
+		void DrawGUI();
+
+		// File I/O Functions
+		void SaveMapData(TileType _tileArray[MAP_ROWS][MAP_COLUMNS], const char* fileName);
+		void LoadMapData(TileType _tileArray[MAP_ROWS][MAP_COLUMNS], const char* fileName);
+
+		// Accessors
+		void SetTIle(int x, int y, PCG::TileType tileType);
+		Color GetTileColor(TileType tileType) const;
+		char GetTileChar(TileType tileType) const;
+
+	private:
+		TileType tileArray[MAP_ROWS][MAP_COLUMNS] = { PCG::TileType::TILE_TYPE_ROCK };
+		MapGenerator* mapGenerator;
+	};
 }
-#endif
-
-#endif

@@ -1,5 +1,6 @@
 #include "perlin.h"
 #include <raylib.h>
+#include <cmath>
 
 // =============================================
 // perlinNoise
