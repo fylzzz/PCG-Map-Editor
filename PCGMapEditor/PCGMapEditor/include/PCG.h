@@ -28,10 +28,7 @@ namespace PCG {
 	constexpr Color UNKNOWN_COLOR = WHITE;
 
 	// File Names
-	constexpr char* MAP_FILE_NAME = "pcg_map_data.fyl";
-
-	// Helpers
-	char GetTileChar(TileType tileType);
+	constexpr const char* MAP_FILE_NAME = "pcg_map_data.fyl";
 
 	// UI Constants
 	constexpr int BUTTON_WIDTH = 200;
@@ -47,14 +44,14 @@ namespace PCG {
 		virtual void Generate(TileType _tileArray[MAP_ROWS][MAP_COLUMNS]) = 0;
 	};
 
-	class RandomMapGenerator {
+	class RandomMapGenerator : public MapGenerator {
 	public:
 		RandomMapGenerator();
 		~RandomMapGenerator();
 		void Generate(TileType _tileArray[MAP_ROWS][MAP_COLUMNS]) override;
 	};
 
-	class NoiseMapGenerator {
+	class NoiseMapGenerator : public MapGenerator {
 	public:
 		NoiseMapGenerator();
 		~NoiseMapGenerator();
@@ -72,16 +69,16 @@ namespace PCG {
 
 		// PCG Functions
 		void CreateMap();
-		void DrawMap() const;
+		void DrawMap(bool isEngine) const;
 		void PrintMap() const;
 		void DrawGUI();
 
 		// File I/O Functions
-		void SaveMapData(TileType _tileArray[MAP_ROWS][MAP_COLUMNS], const char* fileName);
-		void LoadMapData(TileType _tileArray[MAP_ROWS][MAP_COLUMNS], const char* fileName);
+		void SaveMapData(const char* fileName);
+		void LoadMapData(const char* fileName);
 
 		// Accessors
-		void SetTIle(int x, int y, PCG::TileType tileType);
+		void SetTile(int x, int y, PCG::TileType tileType);
 		Color GetTileColor(TileType tileType) const;
 		char GetTileChar(TileType tileType) const;
 

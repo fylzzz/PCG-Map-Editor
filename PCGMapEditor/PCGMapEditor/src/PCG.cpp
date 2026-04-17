@@ -115,7 +115,7 @@ void PCG::TileMap::SetTile(int x, int y, TileType tileType)
 // GetTileColor
 // ============================================= 
 Color PCG::TileMap::GetTileColor(PCG::TileType _tileType) const {
-    switch (tileType) {
+    switch (_tileType) {
     case TILE_TYPE_GRASS: return GRASS_COLOR;
     case TILE_TYPE_ROCK: return ROCK_COLOR;
     default: return UNKNOWN_COLOR;
@@ -130,10 +130,10 @@ void PCG::TileMap::DrawMap(bool isEngine) const {
         for (int x = 0; x < MAP_COLUMNS; x++) {
             if (isEngine) {
                 Vector3 position = { x, 0.0f, y };
-                DrawCube(position, 1.0f, 1.0f, 1.0f, PCG::GetTileColor(_tileArray[y][x]));
+                DrawCube(position, 1.0f, 1.0f, 1.0f, GetTileColor(tileArray[y][x]));
             }
             else {
-                DrawRectangle(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE, PCG::GetTileColor(_tileArray[y][x]));
+                DrawRectangle(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE, GetTileColor(tileArray[y][x]));
             }
         }
     }
@@ -146,7 +146,7 @@ void PCG::TileMap::PrintMap() const {
     printf("\n-------Map Layout:--------\n");
     for (int y = 0; y < MAP_ROWS; y++) {
         for (int x = 0; x < MAP_COLUMNS; x++) {
-            if (_tileArray[y][x] == PCG::TILE_TYPE_GRASS) {
+            if (tileArray[y][x] == PCG::TILE_TYPE_GRASS) {
                 printf("%c", GRASS_CHAR);
             }
             else {
@@ -162,7 +162,7 @@ void PCG::TileMap::PrintMap() const {
 // GetTileChar
 // =============================================
 char PCG::TileMap::GetTileChar(TileType _tileType) const {
-    switch (tileType) {
+    switch (_tileType) {
     case TILE_TYPE_GRASS: return GRASS_CHAR;
     case TILE_TYPE_ROCK: return ROCK_CHAR;
     default: return '?';
@@ -233,7 +233,7 @@ void PCG::TileMap::LoadMapData(const char* fileName) const {
 // =============================================
 // DrawGUI
 // =============================================
-void PCG::DrawGUI() {
+void PCG::TileMap::DrawGUI() {
 	//Reset Button
     if (GuiButton(RESET_BUTTON_BOUNDS, "Reset Map")) {
         CreateMap();
