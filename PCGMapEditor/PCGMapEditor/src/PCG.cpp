@@ -202,7 +202,7 @@ void PCG::TileMap::SaveMapData(const char* fileName) const {
 // =============================================
 // LoadMapData
 // =============================================
-void PCG::TileMap::LoadMapData(const char* fileName) const {
+void PCG::TileMap::LoadMapData(const char* fileName) {
     FILE* file = fopen(fileName, "r");
     if (file == NULL) {
         printf("Error opening file for reading: %s\n", fileName);

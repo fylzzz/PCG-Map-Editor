@@ -14,14 +14,14 @@ int main() {
 	PCG::TileMap tileMap;
 	//tileMap.CreateMap();
 	tileMap.SetMapGenerator(new PCG::NoiseMapGenerator());
-	tileMap.GetMapGenerator()->Generate(tilemap.tileArray);
+	tileMap.GetMapGenerator()->Generate(tileMap.GetTileData());
 
 	while (!WindowShouldClose()) {
 		BeginDrawing();
 		ClearBackground(RAYWHITE);
 
 		//PCG::DrawMap(tileArray, false);
-		tileMap.DrawMap();
+		tileMap.DrawMap(false);
 		//PCG::DrawGUI(tileArray);
 		tileMap.DrawGUI();
 

@@ -74,13 +74,20 @@ namespace PCG {
 		void DrawGUI();
 
 		// File I/O Functions
-		void SaveMapData(const char* fileName);
+		void SaveMapData(const char* fileName) const;
 		void LoadMapData(const char* fileName);
 
 		// Accessors
 		void SetTile(int x, int y, PCG::TileType tileType);
 		Color GetTileColor(TileType tileType) const;
 		char GetTileChar(TileType tileType) const;
+
+		TileType(&GetTileData())[MAP_ROWS][MAP_COLUMNS]{
+			return tileArray;
+		}
+
+		void SetMapGenerator(MapGenerator* generator);
+		MapGenerator* GetMapGenerator() const;
 
 	private:
 		TileType tileArray[MAP_ROWS][MAP_COLUMNS] = { PCG::TileType::TILE_TYPE_ROCK };
