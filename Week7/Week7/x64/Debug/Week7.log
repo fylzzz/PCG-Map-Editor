@@ -1,0 +1,4 @@
+﻿  main.cpp
+C:\Users\iChoc\Documents\GitHub\PCG-Map-Editor\Week7\Week7\main.cpp(11,28): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+C:\Users\iChoc\Documents\GitHub\PCG-Map-Editor\Week7\Week7\main.cpp(45,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  Week7.vcxproj -> C:\Users\iChoc\Documents\GitHub\PCG-Map-Editor\Week7\x64\Debug\Week7.exe
