@@ -40,8 +40,7 @@ void PCG::RandomMapGenerator::Generate(TileType _tileArray[MAP_ROWS][MAP_COLUMNS
 // =============================================
 // Constructor
 PCG::NoiseMapGenerator::NoiseMapGenerator() {
-    s_offsetX = (float)GetRandomValue(0, 10000);
-    s_offsetY = (float)GetRandomValue(0, 10000);
+    
 }
 
 // Destructor
@@ -50,11 +49,67 @@ PCG::NoiseMapGenerator::~NoiseMapGenerator() {
 }
 
 void PCG::NoiseMapGenerator::Generate(TileType _tileArray[MAP_ROWS][MAP_COLUMNS]) {
+    s_offsetX = (float)GetRandomValue(0, 10000);
+    s_offsetY = (float)GetRandomValue(0, 10000);
     for (int y = 0; y < MAP_ROWS; y++) {
         for (int x = 0; x < MAP_COLUMNS; x++) {
             float noise = perlinNoise(s_offsetX + (float)x / MAP_COLUMNS * NOISE_SCALE, s_offsetY + (float)y / MAP_ROWS * NOISE_SCALE);
             _tileArray[y][x] = (noise > 0.0f) ? TILE_TYPE_GRASS : TILE_TYPE_ROCK;
             printf("%f ", noise);
+        }
+    }
+}
+
+// =============================================
+// CellularGenerator
+// =============================================
+// Constructor
+PCG::CellularMapGenerator::CellularMapGenerator() {
+
+}
+
+// Destructor
+PCG::CellularMapGenerator::~CellularMapGenerator() {
+    // nothing to clean up for now, but if you had allocated resources (like noise generators) you would release them here
+}
+
+void PCG::CellularMapGenerator::Generate(TileType _tileArray[MAP_ROWS][MAP_COLUMNS]) {
+    float fillChance = 40;
+    int generations = 6;
+
+    for (int y = 0; y < MAP_ROWS; y++) {
+        for (int x = 0; x < MAP_COLUMNS; x++) {
+            float choice = GetRandomValue(0, 100);
+            _tileArray[y][x] = (choice < fillChance) ? TILE_TYPE_GRASS : TILE_TYPE_ROCK;
+        }
+    }
+
+    for (int g = 0; g < generations; g++) {
+        for (int y = 0; y < MAP_ROWS; y++) {
+            for (int x = 0; x < MAP_COLUMNS; x++) {
+                int rockCount = 0;
+
+                // Check all 8 neighbours
+                for (int dy = -1; dy <= 1; dy++) {
+                    for (int dx = -1; dx <= 1; dx++) {
+                        if (dy == 0 && dx == 0) continue; // skip self
+
+                        int ny = y + dy;
+                        int nx = x + dx;
+
+                        // Bounds check
+                        if (ny >= 0 && ny < MAP_ROWS && nx >= 0 && nx < MAP_COLUMNS) {
+                            if (_tileArray[ny][nx] == TILE_TYPE_ROCK) {
+                                rockCount++;
+                            }
+                        }
+                    }
+                }
+
+                if (rockCount >= 5 && rockCount <= 7) {
+                    _tileArray[y][x] = TILE_TYPE_GRASS;
+                }
+            }
         }
     }
 }
@@ -83,6 +138,20 @@ PCG::TileMap::~TileMap()
         delete mapGenerator;
         mapGenerator = nullptr;
     }
+}
+
+// =============================================
+// SetMapGenerator
+// =============================================
+void PCG::TileMap::SetMapGenerator(MapGenerator* generator) {
+    mapGenerator = generator;
+}
+
+// =============================================
+// GetMapGenerator
+// =============================================
+PCG::MapGenerator* PCG::TileMap::GetMapGenerator() const {
+    return mapGenerator;
 }
 
 // ============================================= 
@@ -236,7 +305,8 @@ void PCG::TileMap::LoadMapData(const char* fileName) {
 void PCG::TileMap::DrawGUI() {
 	//Reset Button
     if (GuiButton(RESET_BUTTON_BOUNDS, "Reset Map")) {
-        CreateMap();
+        //SetRandomSeed(GetTime());
+        GetMapGenerator()->Generate(GetTileData());
     }
 
 	// Save Button

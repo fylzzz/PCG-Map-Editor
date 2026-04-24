@@ -1,5 +1,6 @@
 #include <raylib.h>
 #include <stdio.h>
+#include <time.h>
 #include "resource_dir.h"
 #include "PCG.h"
 
@@ -7,13 +8,14 @@
 int main() {
 	SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
 	InitWindow(PCG::SCREEN_WIDTH, PCG::SCREEN_HEIGHT, "PCG Map Editor");
+	
 
 	// Initialize map
-	PCG::TileType tileArray[PCG::MAP_ROWS][PCG::MAP_COLUMNS] = { TileType::TILE_TYPE_ROCK };
+	PCG::TileType tileArray[PCG::MAP_ROWS][PCG::MAP_COLUMNS] = { PCG::TileType::TILE_TYPE_ROCK };
 	//PCG::CreateMap(tileArray);
 	PCG::TileMap tileMap;
 	//tileMap.CreateMap();
-	tileMap.SetMapGenerator(new PCG::NoiseMapGenerator());
+	tileMap.SetMapGenerator(new PCG::CellularMapGenerator());
 	tileMap.GetMapGenerator()->Generate(tileMap.GetTileData());
 
 	while (!WindowShouldClose()) {

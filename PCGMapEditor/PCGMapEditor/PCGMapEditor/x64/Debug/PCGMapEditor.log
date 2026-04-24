@@ -1,9 +1,16 @@
 ﻿  main.cpp
+C:\Users\s5381149\Documents\GitHub\PCG-Map-Editor\PCGMapEditor\PCGMapEditor\include\PCG.h(10,28): warning C4244: 'initializing': conversion from 'float' to 'const int', possible loss of data
+  (compiling source file 'src/main.cpp')
+  
   PCG.cpp
-C:\Users\s5381149\Documents\GitHub\PCG-Map-Editor\PCGMapEditor\PCGMapEditor\src\PCG.cpp(50,38): warning C4838: conversion from 'int' to 'float' requires a narrowing conversion
-C:\Users\s5381149\Documents\GitHub\PCG-Map-Editor\PCGMapEditor\PCGMapEditor\src\PCG.cpp(50,38): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\s5381149\Documents\GitHub\PCG-Map-Editor\PCGMapEditor\PCGMapEditor\src\PCG.cpp(50,47): warning C4838: conversion from 'int' to 'float' requires a narrowing conversion
-C:\Users\s5381149\Documents\GitHub\PCG-Map-Editor\PCGMapEditor\PCGMapEditor\src\PCG.cpp(50,47): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\s5381149\Documents\GitHub\PCG-Map-Editor\PCGMapEditor\PCGMapEditor\include\PCG.h(10,28): warning C4244: 'initializing': conversion from 'float' to 'const int', possible loss of data
+  (compiling source file 'src/PCG.cpp')
+  
+C:\Users\s5381149\Documents\GitHub\PCG-Map-Editor\PCGMapEditor\PCGMapEditor\src\PCG.cpp(82,26): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\s5381149\Documents\GitHub\PCG-Map-Editor\PCGMapEditor\PCGMapEditor\src\PCG.cpp(201,38): warning C4838: conversion from 'int' to 'float' requires a narrowing conversion
+C:\Users\s5381149\Documents\GitHub\PCG-Map-Editor\PCGMapEditor\PCGMapEditor\src\PCG.cpp(201,38): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\s5381149\Documents\GitHub\PCG-Map-Editor\PCGMapEditor\PCGMapEditor\src\PCG.cpp(201,47): warning C4838: conversion from 'int' to 'float' requires a narrowing conversion
+C:\Users\s5381149\Documents\GitHub\PCG-Map-Editor\PCGMapEditor\PCGMapEditor\src\PCG.cpp(201,47): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
   perlin.cpp
 C:\Users\s5381149\Documents\GitHub\PCG-Map-Editor\PCGMapEditor\PCGMapEditor\src\perlin.cpp(35,45): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
 C:\Users\s5381149\Documents\GitHub\PCG-Map-Editor\PCGMapEditor\PCGMapEditor\src\perlin.cpp(56,18): warning C4554: '>>': check operator precedence for possible error; use parentheses to clarify precedence

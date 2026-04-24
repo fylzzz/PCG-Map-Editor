@@ -58,6 +58,13 @@ namespace PCG {
 		void Generate(TileType _tileType[MAP_ROWS][MAP_COLUMNS]) override;
 	};
 
+	class CellularMapGenerator : public MapGenerator {
+	public:
+		CellularMapGenerator();
+		~CellularMapGenerator();
+		void Generate(TileType _tileType[MAP_ROWS][MAP_COLUMNS]) override;
+	};
+
 	class TileMap {
 	public:
 		TileMap();
