@@ -75,42 +75,46 @@ PCG::CellularMapGenerator::~CellularMapGenerator() {
 
 void PCG::CellularMapGenerator::Generate(TileType _tileArray[MAP_ROWS][MAP_COLUMNS]) {
     float fillChance = 40;
-    int generations = 6;
+    int generations = 5;
+    int minRocks = 5;
 
     for (int y = 0; y < MAP_ROWS; y++) {
         for (int x = 0; x < MAP_COLUMNS; x++) {
             float choice = GetRandomValue(0, 100);
-            _tileArray[y][x] = (choice < fillChance) ? TILE_TYPE_GRASS : TILE_TYPE_ROCK;
+            _tileArray[y][x] = (choice < fillChance) ? TILE_TYPE_ROCK : TILE_TYPE_GRASS;
         }
     }
+
+    TileType tileBuffer[MAP_ROWS][MAP_COLUMNS];
 
     for (int g = 0; g < generations; g++) {
         for (int y = 0; y < MAP_ROWS; y++) {
             for (int x = 0; x < MAP_COLUMNS; x++) {
                 int rockCount = 0;
 
-                // Check all 8 neighbours
                 for (int dy = -1; dy <= 1; dy++) {
                     for (int dx = -1; dx <= 1; dx++) {
-                        if (dy == 0 && dx == 0) continue; // skip self
+                        if (dy == 0 && dx == 0) continue;
 
                         int ny = y + dy;
                         int nx = x + dx;
 
-                        // Bounds check
                         if (ny >= 0 && ny < MAP_ROWS && nx >= 0 && nx < MAP_COLUMNS) {
                             if (_tileArray[ny][nx] == TILE_TYPE_ROCK) {
                                 rockCount++;
                             }
                         }
+                        else {
+                            rockCount++;
+                        }
                     }
                 }
 
-                if (rockCount >= 5 && rockCount <= 7) {
-                    _tileArray[y][x] = TILE_TYPE_GRASS;
-                }
+                tileBuffer[y][x] = (rockCount >= minRocks) ? TILE_TYPE_ROCK : _tileArray[y][x];
             }
         }
+
+        memcpy(_tileArray, tileBuffer, sizeof(tileBuffer));
     }
 }
 
