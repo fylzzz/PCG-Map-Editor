@@ -129,7 +129,6 @@ PCG::TileMap::TileMap()
             tileArray[y][x] = TILE_TYPE_GRASS;
         }
     }
-    mapGenerator = nullptr;
 }
 
 // =============================================
@@ -138,24 +137,42 @@ PCG::TileMap::TileMap()
 
 PCG::TileMap::~TileMap()
 {
-    if (mapGenerator != nullptr) {
-        delete mapGenerator;
-        mapGenerator = nullptr;
-    }
+    
 }
 
 // =============================================
 // SetMapGenerator
 // =============================================
-void PCG::TileMap::SetMapGenerator(MapGenerator* generator) {
-    mapGenerator = generator;
+void PCG::TileMap::SetMapGenerator(std::unique_ptr<MapGenerator> generator) {
+    mapGenerator = std::move(generator);
 }
 
 // =============================================
 // GetMapGenerator
 // =============================================
 PCG::MapGenerator* PCG::TileMap::GetMapGenerator() const {
-    return mapGenerator;
+    return mapGenerator.get();
+}
+
+// =============================================
+// CycleMapGenerator
+// =============================================
+void PCG::TileMap::CycleMapGenerator() {
+    switch (currentGeneratorType) {
+    case GeneratorType::CELLULAR:
+        SetMapGenerator(std::make_unique<NoiseMapGenerator>());
+        currentGeneratorType = GeneratorType::NOISE;
+        break;
+    case GeneratorType::NOISE:
+        SetMapGenerator(std::make_unique<RandomMapGenerator>());
+        currentGeneratorType = GeneratorType::RANDOM;
+        break;
+    case GeneratorType::RANDOM:
+        SetMapGenerator(std::make_unique<CellularMapGenerator>());
+        currentGeneratorType = GeneratorType::CELLULAR;
+        break;
+    }
+    GetMapGenerator()->Generate(GetTileData());
 }
 
 // ============================================= 
@@ -324,4 +341,21 @@ void PCG::TileMap::DrawGUI() {
     if (GuiButton(loadRect, "Load Map")) {
         LoadMapData(MAP_FILE_NAME);
 	}
+
+    //Change Generator Button
+    Rectangle genRect = { PCG::BUTTON_X, PCG::BUTTON_Y - 210, PCG::BUTTON_WIDTH, PCG::BUTTON_HEIGHT };
+    if (GuiButton(genRect, "Change Generator")) {
+        if (GetMapGenerator() != nullptr) {
+            CycleMapGenerator();
+        }
+    }
+
+    //Tell user current GeneratorType
+    const char* generatorName = "";
+    switch (currentGeneratorType) {
+    case GeneratorType::CELLULAR: generatorName = "Cellular"; break;
+    case GeneratorType::NOISE:    generatorName = "Noise";    break;
+    case GeneratorType::RANDOM:   generatorName = "Random";   break;
+    }
+    DrawText(TextFormat("Generator: %s", generatorName), 20, 50, 20, WHITE);
 }

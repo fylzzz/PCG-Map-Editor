@@ -15,7 +15,7 @@ int main() {
 	//PCG::CreateMap(tileArray);
 	PCG::TileMap tileMap;
 	//tileMap.CreateMap();
-	tileMap.SetMapGenerator(new PCG::CellularMapGenerator());
+	tileMap.SetMapGenerator(std::make_unique<PCG::CellularMapGenerator>());
 	tileMap.GetMapGenerator()->Generate(tileMap.GetTileData());
 
 	while (!WindowShouldClose()) {

@@ -1,5 +1,6 @@
 #pragma once
 #include <raylib.h>
+#include <memory>
 
 namespace PCG {
 
@@ -19,6 +20,13 @@ namespace PCG {
 		TILE_TYPE_ROCK,
 		TILE_COUNT
 	} TileType;
+
+	// Generator Types
+	typedef enum {
+		CELLULAR,
+		NOISE,
+		RANDOM
+	} GeneratorType;
 
 	// Visuals & Characters
 	constexpr char GRASS_CHAR = '.';
@@ -93,11 +101,13 @@ namespace PCG {
 			return tileArray;
 		}
 
-		void SetMapGenerator(MapGenerator* generator);
+		void SetMapGenerator(std::unique_ptr<MapGenerator> generator);
 		MapGenerator* GetMapGenerator() const;
+		void CycleMapGenerator();
 
 	private:
 		TileType tileArray[MAP_ROWS][MAP_COLUMNS] = { PCG::TileType::TILE_TYPE_ROCK };
-		MapGenerator* mapGenerator;
+		GeneratorType currentGeneratorType = PCG::GeneratorType::CELLULAR;
+		std::unique_ptr<MapGenerator> mapGenerator;
 	};
 }
