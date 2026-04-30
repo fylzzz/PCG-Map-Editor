@@ -75,9 +75,10 @@ PCG::CellularMapGenerator::~CellularMapGenerator() {
 }
 
 void PCG::CellularMapGenerator::Generate(TileType _tileArray[MAP_ROWS][MAP_COLUMNS]) {
-    float fillChance = 40;
-    int generations = 5;
+    float fillChance = 35;
+    int generations = 6;
     int minRocks = 5;
+    int minRocksToSurvive = 2;
 
     for (int y = 0; y < MAP_ROWS; y++) {
         for (int x = 0; x < MAP_COLUMNS; x++) {
@@ -92,6 +93,7 @@ void PCG::CellularMapGenerator::Generate(TileType _tileArray[MAP_ROWS][MAP_COLUM
         for (int y = 0; y < MAP_ROWS; y++) {
             for (int x = 0; x < MAP_COLUMNS; x++) {
                 int rockCount = 0;
+                int grassCount = 0;
 
                 for (int dy = -1; dy <= 1; dy++) {
                     for (int dx = -1; dx <= 1; dx++) {
@@ -111,7 +113,12 @@ void PCG::CellularMapGenerator::Generate(TileType _tileArray[MAP_ROWS][MAP_COLUM
                     }
                 }
 
-                tileBuffer[y][x] = (rockCount >= minRocks) ? TILE_TYPE_ROCK : _tileArray[y][x];
+                if (_tileArray[y][x] == TILE_TYPE_ROCK) {
+                    tileBuffer[y][x] = (rockCount >= minRocksToSurvive) ? TILE_TYPE_ROCK : TILE_TYPE_GRASS;
+                }
+                else {
+                    tileBuffer[y][x] = (rockCount >= minRocks) ? TILE_TYPE_ROCK : TILE_TYPE_GRASS;
+                }
             }
         }
 
