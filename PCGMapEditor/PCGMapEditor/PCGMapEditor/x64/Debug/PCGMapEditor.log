@@ -7,4 +7,3 @@ C:\Users\iChoc\Documents\GitHub\PCG-Map-Editor\PCGMapEditor\PCGMapEditor\src\PCG
 C:\Users\iChoc\Documents\GitHub\PCG-Map-Editor\PCGMapEditor\PCGMapEditor\src\PCG.cpp(253,38): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
 C:\Users\iChoc\Documents\GitHub\PCG-Map-Editor\PCGMapEditor\PCGMapEditor\src\PCG.cpp(253,47): warning C4838: conversion from 'int' to 'float' requires a narrowing conversion
 C:\Users\iChoc\Documents\GitHub\PCG-Map-Editor\PCGMapEditor\PCGMapEditor\src\PCG.cpp(253,47): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-  PCGMapEditor.vcxproj -> C:\Users\iChoc\Documents\GitHub\PCG-Map-Editor\PCGMapEditor\PCGMapEditor\x64\Debug\PCGMapEditor.exe

@@ -1,3 +1,7 @@
+#if defined(_WIN32) && !defined(_DEBUG)
+#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
+#endif
+
 #include <raylib.h>
 #include <stdio.h>
 #include <time.h>
