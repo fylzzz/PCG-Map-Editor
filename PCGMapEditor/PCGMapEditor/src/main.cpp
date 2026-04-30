@@ -30,6 +30,7 @@ int main() {
 		tileMap.DrawGUI();
 
 		DrawText("PCG Map Editor", 20, 20, 20, DARKGRAY);
+		DrawText("Hold [LSHIFT] + Left Click to change tiles manually", 20, (PCG::SCREEN_HEIGHT - 30), 20, DARKGRAY);
 		EndDrawing();
 	}
 
