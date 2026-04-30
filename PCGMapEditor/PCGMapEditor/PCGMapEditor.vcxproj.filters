@@ -27,12 +27,18 @@
     <ClCompile Include="src\save_dialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\open_dialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\perlin.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\save_dialog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\open_dialog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

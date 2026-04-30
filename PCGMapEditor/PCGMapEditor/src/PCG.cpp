@@ -3,6 +3,7 @@
 #include "PCG.h"
 #include "perlin.h"
 #include "save_dialog.h"
+#include "open_dialog.h"
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
@@ -293,7 +294,14 @@ void PCG::TileMap::SaveMapData(const char* fileName) const {
 // LoadMapData
 // =============================================
 void PCG::TileMap::LoadMapData(const char* fileName) {
-    FILE* file = fopen(fileName, "r");
+    char filePath[260] = "";
+
+    if (!ShowOpenDialog(filePath, sizeof(filePath), fileName)) {
+        printf("Open cancelled.\n");
+        return;
+    }
+    
+    FILE* file = fopen(filePath, "r");
     if (file == NULL) {
         printf("Error opening file for reading: %s\n", fileName);
         return;

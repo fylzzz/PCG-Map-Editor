@@ -156,11 +156,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\open_dialog.cpp" />
     <ClCompile Include="src\PCG.cpp" />
     <ClCompile Include="src\perlin.cpp" />
     <ClCompile Include="src\save_dialog.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\open_dialog.h" />
     <ClInclude Include="include\perlin.h" />
     <ClInclude Include="include\save_dialog.h" />
   </ItemGroup>
