@@ -97,6 +97,8 @@ namespace PCG {
 		Color GetTileColor(TileType tileType) const;
 		char GetTileChar(TileType tileType) const;
 
+		void ChangeTile();
+
 		TileType(&GetTileData())[MAP_ROWS][MAP_COLUMNS]{
 			return tileArray;
 		}

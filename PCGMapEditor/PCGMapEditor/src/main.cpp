@@ -22,6 +22,8 @@ int main() {
 		BeginDrawing();
 		ClearBackground(RAYWHITE);
 
+		tileMap.ChangeTile();
+
 		//PCG::DrawMap(tileArray, false);
 		tileMap.DrawMap(false);
 		//PCG::DrawGUI(tileArray);

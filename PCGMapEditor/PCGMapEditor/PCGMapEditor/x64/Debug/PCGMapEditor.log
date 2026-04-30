@@ -1,10 +1,5 @@
-﻿  PCG.cpp
+﻿  main.cpp
 C:\Users\iChoc\Documents\GitHub\PCG-Map-Editor\PCGMapEditor\PCGMapEditor\include\PCG.h(11,28): warning C4244: 'initializing': conversion from 'float' to 'const int', possible loss of data
-  (compiling source file 'src/PCG.cpp')
+  (compiling source file 'src/main.cpp')
   
-C:\Users\iChoc\Documents\GitHub\PCG-Map-Editor\PCGMapEditor\PCGMapEditor\src\PCG.cpp(85,26): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\iChoc\Documents\GitHub\PCG-Map-Editor\PCGMapEditor\PCGMapEditor\src\PCG.cpp(230,38): warning C4838: conversion from 'int' to 'float' requires a narrowing conversion
-C:\Users\iChoc\Documents\GitHub\PCG-Map-Editor\PCGMapEditor\PCGMapEditor\src\PCG.cpp(230,38): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\iChoc\Documents\GitHub\PCG-Map-Editor\PCGMapEditor\PCGMapEditor\src\PCG.cpp(230,47): warning C4838: conversion from 'int' to 'float' requires a narrowing conversion
-C:\Users\iChoc\Documents\GitHub\PCG-Map-Editor\PCGMapEditor\PCGMapEditor\src\PCG.cpp(230,47): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
   PCGMapEditor.vcxproj -> C:\Users\iChoc\Documents\GitHub\PCG-Map-Editor\PCGMapEditor\PCGMapEditor\x64\Debug\PCGMapEditor.exe

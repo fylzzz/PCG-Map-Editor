@@ -198,6 +198,29 @@ void PCG::TileMap::CreateMap() {
     }
 }
 
+// =============================================
+// ChangeTile
+// =============================================
+void PCG::TileMap::ChangeTile() {
+    if (IsMouseButtonPressed(0)) {
+        int tileX = GetMouseX() / PCG::TILE_SIZE;
+        int tileY = GetMouseY() / PCG::TILE_SIZE;
+
+        if (tileX >= 0 && tileX < MAP_COLUMNS && tileY >= 0 && tileY < MAP_ROWS) {
+            TileType clickedTile = tileArray[tileY][tileX];
+
+            switch (clickedTile) {
+            case TILE_TYPE_GRASS:
+                SetTile(tileX, tileY, TILE_TYPE_ROCK);
+                break;
+            case TILE_TYPE_ROCK:
+                SetTile(tileX, tileY, TILE_TYPE_GRASS);
+                break;
+            }
+        }
+    }
+}
+
 // ============================================= 
 // SetTile(int x, int y, TileType tileType)
 // ============================================= 
